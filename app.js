@@ -42,12 +42,12 @@ require('dotenv').config();
     });
 
     app.get('/cad', (req, res) =>{
-        console.log('Rodando!');
+        console.log('Rodando no endereço de cadastro!');
         return res.render('formulario');
     });
 
     app.post('/add', (req, res) =>{
-        res.send('Formulário Recebido!!!')
+        res.send(`Formulário recebido! Título: ${req.body.titulo} Conteúdo: ${req.body.conteudo}`);
     });
 
     app.listen(port, (req,res) =>{
