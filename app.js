@@ -1,26 +1,25 @@
-const express = require('express');
-const app = express();
-const port = 3000;
-const handlebars = require('express-handlebars');
-const Sequelize = require('sequelize');
+// Importações
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+import express from 'express';
+import handlebars from 'express-handlebars';
+import { sequelize, Sequelize } from './models/db.js';
+
+//
+
+const app = express();
+const port = process.env.PORT;
 
 
 // Config 
+
+    //dotenv
+
+    dotenv.config(); 
+
     // Template Engine
         app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
         app.set('view engine', 'handlebars');
-
-//Conexão com o banco de dados
-    const sequelize = new Sequelize(
-        process.env.DB_NAME, 
-        process.env.DB_USER, 
-        process.env.DB_PASSWORD, 
-        {
-        host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT
-    });
 
 // Body-Parser
     app.use(express.urlencoded());
