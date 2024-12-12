@@ -1,0 +1,3 @@
+Caro leitor do código
+Ao rodar a conexão do servidor 'db.js' use o script serve! o env não tá funcionando e eu desisti de usar o framework dotenv e usei a feature própria do node = npm server; verifique se a conexão foi estabelecida
+
