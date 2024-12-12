@@ -5,6 +5,7 @@ import express from 'express';
 import handlebars, { engine } from 'express-handlebars';
 import { sequelize, Sequelize } from './models/db.js';
 import {Post} from "./models/Post.js"
+import { where } from 'sequelize';
 //
 
 const app = express();
@@ -72,6 +73,34 @@ const port = process.env.PORT;
         });
 
     });
+
+    app.get('/deletar/:id', function(req, res){
+
+        console.log('requistada com sucesso');
+
+        Post.destroy({
+            where:{'id': req.params.id}    
+        }).then(()=>{
+            res.send('Postagens deletada');
+        }).catch((err)=>{
+            res.send(`Erro: ${err}`);
+        });
+    });
+
+    // app.get('/editado/:id', function(req, res){
+
+    //     Post.update({
+    //         titulo: req.body.titulo,
+    //         conteudo: req.body.conteudo
+    //     },{
+    //         where:{id:req.params.id}
+    //     }).then(()=>{
+    //         res.redirect('/');
+    //     }).catch((err)=>{
+    //         console.log(err);
+    //     });
+
+    // });
 
     app.listen(port, (req,res) =>{
         console.log(`Rodando na porta ${port}`);
