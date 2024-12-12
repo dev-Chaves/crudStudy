@@ -2,9 +2,9 @@
 
 import dotenv from 'dotenv';
 import express from 'express';
-import handlebars from 'express-handlebars';
+import handlebars, { engine } from 'express-handlebars';
 import { sequelize, Sequelize } from './models/db.js';
-
+import {Post} from "./models/Post.js"
 //
 
 const app = express();
@@ -15,13 +15,23 @@ const port = process.env.PORT;
 
     //dotenv
 
-    dotenv.config(); 
+    dotenv.config();
 
     // Template Engine
-        app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
-        app.set('view engine', 'handlebars');
+    app.engine(
+        'handlebars',
+        engine({
+            runtimeOptions: {
+                allowProtoPropertiesByDefault: true, // Permite acesso a propriedades de protótipo
+                allowProtoMethodsByDefault: true,   // Permite acesso a métodos de protótipo
+            },
+        })
+    );
+    
+    app.set('view engine', 'handlebars');
 
 // Body-Parser
+
     app.use(express.urlencoded());
     app.use(express.json());
 
@@ -36,8 +46,13 @@ const port = process.env.PORT;
 // Rotas
     
     app.get('/', (req,res) =>{
-        console.log('Servidor Rodando na Rota Raiz');
-        res.send('Rota Raiz funcionando');
+        Post.findAll({order: [['id', 'DESC']] }).then((posts)=>{
+            res.render('home',{
+                posts: posts
+            });
+
+        })
+
     });
 
     app.get('/cad', (req, res) =>{
@@ -46,14 +61,18 @@ const port = process.env.PORT;
     });
 
     app.post('/add', (req, res) =>{
-        res.send(`Formulário recebido! Título: ${req.body.titulo} Conteúdo: ${req.body.conteudo}`);
+
+        Post.create({
+            titulo: req.body.titulo,
+            conteudo: req.body.conteudo
+        }).then(()=>{
+            res.redirect('/');
+        }).catch((err)=>{
+            res.send(`Houve um erro: ${err}`);
+        });
+
     });
 
     app.listen(port, (req,res) =>{
         console.log(`Rodando na porta ${port}`);
     });
-
-    // app.get('/ola', (req,res)=>{
-    //     res.sendFile(__dirname + '/html/index.html');
-    //     console.log('Testando');
-    // });

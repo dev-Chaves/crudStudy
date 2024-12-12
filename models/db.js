@@ -1,4 +1,7 @@
 import { Sequelize } from "sequelize";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME, 
@@ -9,10 +12,12 @@ const sequelize = new Sequelize(
     dialect: process.env.DB_DIALECT
 });
 
-export {Sequelize, sequelize}
+
 
 sequelize.authenticate().then(()=>{
     console.log('Conexão estabelicida com sucesso!');
 }).catch((err)=>{
     console.log(`Erro: ${err}`);
 });
+
+export {Sequelize, sequelize}
